@@ -22,6 +22,9 @@ public class SoundPacketImpl implements SoundPacket {
         this.packet = packet;
     }
 
+    private float Distance = -1;
+    private String CustomInfo;
+
     @Override
     public UUID getChannelId() {
         return packet.getChannelId();
@@ -69,20 +72,39 @@ public class SoundPacketImpl implements SoundPacket {
 
     @Override
     public EntitySoundPacket toEntitySoundPacket(UUID entityUuid, boolean whispering) {
-        return new EntitySoundPacketImpl(new PlayerSoundPacket(packet.getChannelId(), packet.getSender(), packet.getData(), packet.getSequenceNumber(), whispering, getDistance(), null));
+        return new EntitySoundPacketImpl(new PlayerSoundPacket(packet.getChannelId(), packet.getSender(), packet.getData(), packet.getSequenceNumber(), whispering, getDistance(), null, getCustomInfo()));
     }
 
     @Override
     public LocationalSoundPacket toLocationalSoundPacket(Position position) {
         if (position instanceof PositionImpl) {
             PositionImpl p = (PositionImpl) position;
-            return new LocationalSoundPacketImpl(new LocationSoundPacket(packet.getChannelId(), packet.getSender(), p.getPosition(), packet.getData(), packet.getSequenceNumber(), getDistance(), null));
+            return new LocationalSoundPacketImpl(new LocationSoundPacket(packet.getChannelId(), packet.getSender(), p.getPosition(), packet.getData(), packet.getSequenceNumber(), getDistance(), null, getCustomInfo()));
         } else {
             throw new IllegalArgumentException("position is not an instance of PositionImpl");
         }
     }
 
+    private String getCustomInfo() {
+        if (CustomInfo == null) {
+            if (this instanceof EntitySoundPacket) {
+                EntitySoundPacket p = (EntitySoundPacket) this;
+                return p.getCustomInfo();
+            } else if (this instanceof LocationalSoundPacket) {
+                LocationalSoundPacket p = (LocationalSoundPacket) this;
+                return p.getCustomInfo();
+            } else if (this instanceof StaticSoundPacket) {
+                StaticSoundPacket p = (StaticSoundPacket) this;
+                return p.getCustomInfo();
+            }
+        }
+        return CustomInfo;
+    }
+
     private float getDistance() {
+        if(Distance != -1) {
+            return Distance;
+        }
         if (this instanceof EntitySoundPacket) {
             EntitySoundPacket p = (EntitySoundPacket) this;
             return p.getDistance();
@@ -93,9 +115,17 @@ public class SoundPacketImpl implements SoundPacket {
         return Utils.getDefaultDistanceServer();
     }
 
+    private void setDistance(float Distance) {
+        this.Distance = Distance;
+    }
+
+    private void setCustomInfo(String CustomInfo) {
+        this.CustomInfo = CustomInfo;
+    }
+
     @Override
     public StaticSoundPacket toStaticSoundPacket() {
-        return new StaticSoundPacketImpl(new GroupSoundPacket(packet.getChannelId(), packet.getSender(), packet.getData(), packet.getSequenceNumber(), null));
+        return new StaticSoundPacketImpl(new GroupSoundPacket(packet.getChannelId(), packet.getSender(), packet.getData(), packet.getSequenceNumber(), null, getCustomInfo()));
     }
 
     public abstract static class BuilderImpl<T extends BuilderImpl<T, P>, P extends SoundPacket> implements Builder<T, P> {

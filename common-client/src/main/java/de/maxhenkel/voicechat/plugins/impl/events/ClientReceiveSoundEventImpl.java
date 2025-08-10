@@ -42,12 +42,14 @@ public class ClientReceiveSoundEventImpl extends ClientEventImpl implements Clie
         private UUID entity;
         private boolean whispering;
         private float distance;
+        private String CustomInfo;
 
-        public EntitySoundImpl(UUID id, UUID entity, short[] rawAudio, boolean whispering, float distance) {
+        public EntitySoundImpl(UUID id, UUID entity, short[] rawAudio, boolean whispering, float distance, String info) {
             super(id, rawAudio);
             this.entity = entity;
             this.whispering = whispering;
             this.distance = distance;
+            this.CustomInfo = info;
         }
 
         @Override
@@ -64,16 +66,28 @@ public class ClientReceiveSoundEventImpl extends ClientEventImpl implements Clie
         public float getDistance() {
             return distance;
         }
+
+        @Override
+        public String getCustomInfo() {
+            return CustomInfo;
+        }
+
+        @Override
+        public void setCustomInfo(String Info) {
+            CustomInfo = Info;
+        }
     }
 
     public static class LocationalSoundImpl extends ClientReceiveSoundEventImpl implements LocationalSound {
         private Position position;
         private float distance;
+        private String CustomInfo;
 
-        public LocationalSoundImpl(UUID id, short[] rawAudio, Position position, float distance) {
+        public LocationalSoundImpl(UUID id, short[] rawAudio, Position position, float distance, String info) {
             super(id, rawAudio);
             this.position = position;
             this.distance = distance;
+            this.CustomInfo = info;
         }
 
         @Override
@@ -85,12 +99,39 @@ public class ClientReceiveSoundEventImpl extends ClientEventImpl implements Clie
         public float getDistance() {
             return distance;
         }
+
+        @Override
+        public void setDistance(float Distance) {
+            this.distance = Distance;
+        }
+
+        @Override
+        public String getCustomInfo() {
+            return CustomInfo;
+        }
+
+        @Override
+        public void setCustomInfo(String Info) {
+            CustomInfo = Info;
+        }
     }
 
     public static class StaticSoundImpl extends ClientReceiveSoundEventImpl implements StaticSound {
+        private String CustomInfo;
 
-        public StaticSoundImpl(UUID id, short[] rawAudio) {
+        public StaticSoundImpl(UUID id, short[] rawAudio, String Info) {
             super(id, rawAudio);
+            this.CustomInfo = Info;
+        }
+
+        @Override
+        public String getCustomInfo() {
+            return CustomInfo;
+        }
+
+        @Override
+        public void setCustomInfo(String Info) {
+            CustomInfo = Info;
         }
 
     }

@@ -14,6 +14,7 @@ public abstract class ClientAudioChannelImpl implements ClientAudioChannel {
     @Nullable
     protected String category;
 
+
     public ClientAudioChannelImpl(UUID id) {
         this.id = id;
     }

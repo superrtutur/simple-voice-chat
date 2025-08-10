@@ -49,6 +49,10 @@ public interface ClientReceiveSoundEvent extends ClientEvent {
          * @return the distance, the audio can be heard
          */
         float getDistance();
+
+        String getCustomInfo();
+
+        void setCustomInfo(String info);
     }
 
     public static interface LocationalSound extends ClientReceiveSoundEvent {
@@ -61,10 +65,21 @@ public interface ClientReceiveSoundEvent extends ClientEvent {
          * @return the distance, the audio can be heard
          */
         float getDistance();
+
+        void setDistance(float Distance);
+
+        /**
+         * @return the CustomInfo
+         */
+        String getCustomInfo();
+
+        void setCustomInfo(String info);
     }
 
     public static interface StaticSound extends ClientReceiveSoundEvent {
+        String getCustomInfo();
 
+        void setCustomInfo(String info);
     }
 
 }

@@ -13,10 +13,13 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderLivingEvent;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class RenderEvents {
 
@@ -33,7 +36,7 @@ public class RenderEvents {
 
     public RenderEvents() {
         minecraft = Minecraft.getMinecraft();
-        ClientCompatibilityManager.INSTANCE.onRenderNamePlate(this::onRenderName);
+        ClientCompatibilityManager.INSTANCE.onRenderLiving(this::onRenderName);
         ClientCompatibilityManager.INSTANCE.onRenderHUD(this::onRenderHUD);
     }
 
@@ -96,8 +99,18 @@ public class RenderEvents {
         GlStateManager.popMatrix();
     }
 
-    private void onRenderName(Entity entity, String str, double x, double y, double z, int maxDistance) {
-        if (str == null) {
+    private void onRenderName(Entity entity,
+                              String displayName,
+                              double x,
+                              double y,
+                              double z,
+                              int maxDistance) {
+        EntityPlayer player = (EntityPlayer) entity;
+        if (entity == minecraft.player) {
+            return;
+        }
+
+        if (displayName == null) {
             return;
         }
         if (!shouldShowIcons()) {
@@ -109,27 +122,23 @@ public class RenderEvents {
         if (!(entity instanceof EntityPlayer)) {
             return;
         }
-        EntityPlayer player = (EntityPlayer) entity;
-        if (entity == minecraft.player) {
-            return;
-        }
 
-        if (!minecraft.gameSettings.hideGUI) {
-            ClientPlayerStateManager manager = ClientManager.getPlayerStateManager();
-            ClientVoicechat client = ClientManager.getClient();
-            UUID groupId = manager.getGroup(player);
 
-            if (client != null && client.getTalkCache().isWhispering(player)) {
-                renderPlayerIcon(player, str, x, y, z, maxDistance, WHISPER_SPEAKER_ICON);
-            } else if (client != null && client.getTalkCache().isTalking(player)) {
-                renderPlayerIcon(player, str, x, y, z, maxDistance, SPEAKER_ICON);
-            } else if (manager.isPlayerDisconnected(player)) {
-                renderPlayerIcon(player, str, x, y, z, maxDistance, DISCONNECT_ICON);
-            } else if (groupId != null && !groupId.equals(manager.getGroupID())) {
-                renderPlayerIcon(player, str, x, y, z, maxDistance, GROUP_ICON);
-            } else if (manager.isPlayerDisabled(player)) {
-                renderPlayerIcon(player, str, x, y, z, maxDistance, SPEAKER_OFF_ICON);
-            }
+        ClientPlayerStateManager manager = ClientManager.getPlayerStateManager();
+        ClientVoicechat client = ClientManager.getClient();
+        UUID groupId = manager.getGroup(player);
+
+
+        if (client != null && client.getTalkCache().isWhispering(player)) {
+            renderPlayerIcon(player, displayName, x, y, z, 16, WHISPER_SPEAKER_ICON);
+        } else if (client != null && client.getTalkCache().isTalking(player)) {
+            renderPlayerIcon(player, displayName, x, y, z, 16, SPEAKER_ICON);
+        } else if (manager.isPlayerDisconnected(player)) {
+            renderPlayerIcon(player, displayName, x, y, z, 16, DISCONNECT_ICON);
+        } else if (groupId != null && !groupId.equals(manager.getGroupID())) {
+            renderPlayerIcon(player, displayName, x, y, z, 16, GROUP_ICON);
+        } else if (manager.isPlayerDisabled(player)) {
+            renderPlayerIcon(player, displayName, x, y, z, 16, SPEAKER_OFF_ICON);
         }
     }
 
@@ -156,7 +165,7 @@ public class RenderEvents {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         int halfNameWidth = minecraft.fontRenderer.getStringWidth(str) / 2;
-        GlStateManager.translate(halfNameWidth, verticalShift - 1F, 0F);
+        GlStateManager.translate(0F, verticalShift - 1F, 0F);
         if (!entity.isSneaking()) {
             drawIcon(texture, true);
             GlStateManager.enableDepth();

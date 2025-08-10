@@ -3,6 +3,7 @@ package de.maxhenkel.voicechat.plugins.impl.packets;
 import de.maxhenkel.voicechat.api.Position;
 import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.plugins.impl.PositionImpl;
+import de.maxhenkel.voicechat.voice.common.GroupSoundPacket;
 import de.maxhenkel.voicechat.voice.common.LocationSoundPacket;
 import de.maxhenkel.voicechat.voice.common.Utils;
 
@@ -13,11 +14,13 @@ public class LocationalSoundPacketImpl extends SoundPacketImpl implements Locati
 
     private final LocationSoundPacket packet;
     private final PositionImpl position;
+    private String CustomInfo;
 
     public LocationalSoundPacketImpl(LocationSoundPacket packet) {
         super(packet);
         this.packet = packet;
         this.position = new PositionImpl(packet.getLocation());
+        this.CustomInfo = packet.getCustomInfo();
     }
 
     public Position getPosition() {
@@ -30,6 +33,26 @@ public class LocationalSoundPacketImpl extends SoundPacketImpl implements Locati
     }
 
     @Override
+    public String getCustomInfo() {
+        if(CustomInfo == null) {
+            return packet.getCustomInfo();
+        }
+        return CustomInfo;
+    }
+
+    @Override
+    public void setDistance(float newvalue) {
+        packet.setDistance(newvalue);
+    }
+
+    @Override
+    public void setCustomInfo(String info) {
+        this.CustomInfo = info;
+        packet.setCustomInfo(info);
+    }
+
+
+    @Override
     public LocationSoundPacket getPacket() {
         return packet;
     }
@@ -38,6 +61,7 @@ public class LocationalSoundPacketImpl extends SoundPacketImpl implements Locati
 
         protected PositionImpl position;
         protected float distance;
+        protected String CustomInfo;
 
         public BuilderImpl(SoundPacketImpl soundPacket) {
             super(soundPacket);
@@ -45,10 +69,21 @@ public class LocationalSoundPacketImpl extends SoundPacketImpl implements Locati
                 LocationalSoundPacketImpl p = (LocationalSoundPacketImpl) soundPacket;
                 position = p.position;
                 distance = p.getDistance();
+                CustomInfo = p.getCustomInfo();
             } else if (soundPacket instanceof EntitySoundPacketImpl) {
                 EntitySoundPacketImpl p = (EntitySoundPacketImpl) soundPacket;
                 distance = p.getDistance();
+                CustomInfo = p.getCustomInfo();
             } else {
+                if (soundPacket instanceof StaticSoundPacketImpl) {
+                    StaticSoundPacketImpl p = (StaticSoundPacketImpl) soundPacket;
+                    System.out.println("STATIC");
+                    CustomInfo = p.getCustomInfo();
+                } else {
+                    System.out.println("NON CONNU");
+                }
+
+
                 distance = Utils.getDefaultDistanceServer();
             }
         }
@@ -71,11 +106,17 @@ public class LocationalSoundPacketImpl extends SoundPacketImpl implements Locati
         }
 
         @Override
+        public BuilderImpl custominfo(String info) {
+            this.CustomInfo = info;
+            return this;
+        }
+
+        @Override
         public LocationalSoundPacket build() {
             if (position == null) {
                 throw new IllegalStateException("position missing");
             }
-            return new LocationalSoundPacketImpl(new LocationSoundPacket(channelId, sender, position.getPosition(), opusEncodedData, sequenceNumber, distance, category));
+            return new LocationalSoundPacketImpl(new LocationSoundPacket(channelId, sender, position.getPosition(), opusEncodedData, sequenceNumber, distance, category, CustomInfo));
         }
 
     }

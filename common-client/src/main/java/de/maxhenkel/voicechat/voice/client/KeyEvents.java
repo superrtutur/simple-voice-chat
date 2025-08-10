@@ -22,7 +22,6 @@ public class KeyEvents {
     private final Minecraft minecraft;
 
     public static KeyBinding KEY_PTT;
-    public static KeyBinding KEY_WHISPER;
     public static KeyBinding KEY_MUTE;
     public static KeyBinding KEY_DISABLE;
     public static KeyBinding KEY_HIDE_ICONS;
@@ -39,7 +38,6 @@ public class KeyEvents {
         ClientCompatibilityManager.INSTANCE.onHandleKeyBinds(this::handleKeybinds);
 
         KEY_PTT = ClientCompatibilityManager.INSTANCE.registerKeyBinding(new KeyBinding("key.push_to_talk", Keyboard.KEY_NONE, "key.categories.voicechat"));
-        KEY_WHISPER = ClientCompatibilityManager.INSTANCE.registerKeyBinding(new KeyBinding("key.whisper", Keyboard.KEY_NONE, "key.categories.voicechat"));
         KEY_MUTE = ClientCompatibilityManager.INSTANCE.registerKeyBinding(new KeyBinding("key.mute_microphone", Keyboard.KEY_M, "key.categories.voicechat"));
         KEY_DISABLE = ClientCompatibilityManager.INSTANCE.registerKeyBinding(new KeyBinding("key.disable_voice_chat", Keyboard.KEY_N, "key.categories.voicechat"));
         KEY_HIDE_ICONS = ClientCompatibilityManager.INSTANCE.registerKeyBinding(new KeyBinding("key.hide_icons", Keyboard.KEY_H, "key.categories.voicechat"));
@@ -50,7 +48,7 @@ public class KeyEvents {
         KEY_ADJUST_VOLUMES = ClientCompatibilityManager.INSTANCE.registerKeyBinding(new KeyBinding("key.voice_chat_adjust_volumes", Keyboard.KEY_NONE, "key.categories.voicechat"));
 
         ALL_KEYS = new KeyBinding[]{
-                KEY_PTT, KEY_WHISPER, KEY_MUTE, KEY_DISABLE, KEY_HIDE_ICONS, KEY_VOICE_CHAT, KEY_VOICE_CHAT_SETTINGS, KEY_GROUP, KEY_TOGGLE_RECORDING, KEY_ADJUST_VOLUMES
+                KEY_PTT, KEY_MUTE, KEY_DISABLE, KEY_HIDE_ICONS, KEY_VOICE_CHAT, KEY_VOICE_CHAT_SETTINGS, KEY_GROUP, KEY_TOGGLE_RECORDING, KEY_ADJUST_VOLUMES
         };
     }
 
@@ -106,10 +104,6 @@ public class KeyEvents {
         }
 
         if (KEY_PTT.isPressed()) {
-            checkConnected();
-        }
-
-        if (KEY_WHISPER.isPressed()) {
             checkConnected();
         }
 

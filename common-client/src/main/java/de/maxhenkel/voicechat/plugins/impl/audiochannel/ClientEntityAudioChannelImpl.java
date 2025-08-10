@@ -12,6 +12,7 @@ public class ClientEntityAudioChannelImpl extends ClientAudioChannelImpl impleme
     private UUID entityId;
     private boolean whispering;
     private float distance;
+    private String CustomInfo;
 
     public ClientEntityAudioChannelImpl(UUID id, UUID entityId) {
         super(id);
@@ -22,7 +23,7 @@ public class ClientEntityAudioChannelImpl extends ClientAudioChannelImpl impleme
 
     @Override
     protected SoundPacket<?> createSoundPacket(short[] rawAudio) {
-        return new PlayerSoundPacket(id, id, rawAudio, whispering, distance, category);
+        return new PlayerSoundPacket(id, id, rawAudio, whispering, distance, category, CustomInfo);
     }
 
     @Override
@@ -46,8 +47,18 @@ public class ClientEntityAudioChannelImpl extends ClientAudioChannelImpl impleme
     }
 
     @Override
+    public String getCustomInfo() {
+        return CustomInfo;
+    }
+
+    @Override
     public void setDistance(float distance) {
         this.distance = distance;
+    }
+
+    @Override
+    public void setCustomInfo(String info) {
+        this.CustomInfo = info;
     }
 
 }

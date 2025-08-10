@@ -70,6 +70,12 @@ public class VoicechatServerApiImpl extends VoicechatApiImpl implements Voicecha
     public void sendStaticSoundPacketTo(VoicechatConnection connection, StaticSoundPacket p) {
         if (p instanceof StaticSoundPacketImpl) {
             StaticSoundPacketImpl packet = (StaticSoundPacketImpl) p;
+            System.out.println("CHECK - 1");
+            System.out.println(packet.getCustomInfo());
+            System.out.println("CHECK - 2");
+            System.out.println(packet.getPacket().getCustomInfo());
+            packet.getPacket().setCustomInfo(packet.getCustomInfo());
+            System.out.println(packet.getPacket().getCustomInfo());
             sendPacket(connection, packet.getPacket());
         }
     }

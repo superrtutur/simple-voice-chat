@@ -21,6 +21,7 @@ public class LocationalAudioChannelImpl extends AudioChannelImpl implements Loca
     protected ServerLevel level;
     protected PositionImpl position;
     protected float distance;
+    protected String CustomInfo;
 
     public LocationalAudioChannelImpl(UUID channelId, Server server, ServerLevel level, PositionImpl position) {
         super(channelId, server);
@@ -49,13 +50,23 @@ public class LocationalAudioChannelImpl extends AudioChannelImpl implements Loca
     }
 
     @Override
+    public String getCustomInfo() {
+        return CustomInfo;
+    }
+
+    @Override
     public void setDistance(float distance) {
         this.distance = distance;
     }
 
     @Override
+    public void setCustomInfo(String info) {
+        this.CustomInfo = info;
+    }
+
+    @Override
     public void send(byte[] opusData) {
-        broadcast(new LocationSoundPacket(channelId, channelId, position.getPosition(), opusData, sequenceNumber.getAndIncrement(), distance, category));
+        broadcast(new LocationSoundPacket(channelId, channelId, position.getPosition(), opusData, sequenceNumber.getAndIncrement(), distance, category, CustomInfo));
     }
 
     @Override
@@ -65,7 +76,7 @@ public class LocationalAudioChannelImpl extends AudioChannelImpl implements Loca
 
     @Override
     public void flush() {
-        broadcast(new LocationSoundPacket(channelId, channelId, position.getPosition(), new byte[0], sequenceNumber.getAndIncrement(), distance, category));
+        broadcast(new LocationSoundPacket(channelId, channelId, position.getPosition(), new byte[0], sequenceNumber.getAndIncrement(), distance, category, CustomInfo));
     }
 
     private void broadcast(LocationSoundPacket packet) {

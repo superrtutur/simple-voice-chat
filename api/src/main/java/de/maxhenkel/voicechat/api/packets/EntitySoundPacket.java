@@ -23,6 +23,9 @@ public interface EntitySoundPacket extends SoundPacket {
      * @return the distance, the audio can be heard
      */
     float getDistance();
+    String getCustomInfo();
+    void setDistance(float distance);
+    void setCustomInfo(String info);
 
     /**
      * A builder to build an entity sound packet.

@@ -6,7 +6,9 @@ import de.maxhenkel.voicechat.service.Service;
 import de.maxhenkel.voicechat.voice.client.ClientVoicechatConnection;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.NetworkManager;
+import net.minecraftforge.client.event.RenderLivingEvent;
 
 import java.net.SocketAddress;
 import java.util.function.Consumer;
@@ -15,7 +17,7 @@ public abstract class ClientCompatibilityManager {
 
     public static ClientCompatibilityManager INSTANCE = Service.get(ClientCompatibilityManager.class);
 
-    public abstract void onRenderNamePlate(RenderNameplateEvent onRenderNamePlate);
+    public abstract void onRenderLiving(RenderNameplateEvent listener);
 
     public abstract void onRenderHUD(RenderHUDEvent onRenderHUD);
 
@@ -50,7 +52,9 @@ public abstract class ClientCompatibilityManager {
     }
 
     public interface RenderNameplateEvent {
-        void render(Entity entity, String str, double x, double y, double z, int maxDistance);
+        void render(Entity entity, String displayName,
+                    double x, double y, double z,
+                    int maxDistance);
     }
 
     public interface RenderHUDEvent {
@@ -60,6 +64,7 @@ public abstract class ClientCompatibilityManager {
     public interface KeyboardEvent {
         void onKeyboardEvent();
     }
+
 
     public interface MouseEvent {
         void onMouseEvent();

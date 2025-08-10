@@ -19,6 +19,7 @@ public class EntityAudioChannelImpl extends AudioChannelImpl implements EntityAu
     protected Entity entity;
     protected boolean whispering;
     protected float distance;
+    protected String CustomInfo;
 
     public EntityAudioChannelImpl(UUID channelId, Server server, Entity entity) {
         super(channelId, server);
@@ -53,23 +54,33 @@ public class EntityAudioChannelImpl extends AudioChannelImpl implements EntityAu
     }
 
     @Override
+    public String getCustomInfo() {
+        return CustomInfo;
+    }
+
+    @Override
     public void setDistance(float distance) {
         this.distance = distance;
     }
 
     @Override
+    public void setCustomInfo(String CustomInfo) {
+        this.CustomInfo = CustomInfo;
+    }
+
+    @Override
     public void send(byte[] opusData) {
-        broadcast(new PlayerSoundPacket(channelId, entity.getUuid(), opusData, sequenceNumber.getAndIncrement(), whispering, distance, category));
+        broadcast(new PlayerSoundPacket(channelId, entity.getUuid(), opusData, sequenceNumber.getAndIncrement(), whispering, distance, category, CustomInfo));
     }
 
     @Override
     public void send(MicrophonePacket microphonePacket) {
-        broadcast(new PlayerSoundPacket(channelId, entity.getUuid(), microphonePacket.getOpusEncodedData(), sequenceNumber.getAndIncrement(), whispering, distance, category));
+        broadcast(new PlayerSoundPacket(channelId, entity.getUuid(), microphonePacket.getOpusEncodedData(), sequenceNumber.getAndIncrement(), whispering, distance, category, CustomInfo));
     }
 
     @Override
     public void flush() {
-        broadcast(new PlayerSoundPacket(channelId, entity.getUuid(), new byte[0], sequenceNumber.getAndIncrement(), whispering, distance, category));
+        broadcast(new PlayerSoundPacket(channelId, entity.getUuid(), new byte[0], sequenceNumber.getAndIncrement(), whispering, distance, category, CustomInfo));
     }
 
     private void broadcast(PlayerSoundPacket packet) {

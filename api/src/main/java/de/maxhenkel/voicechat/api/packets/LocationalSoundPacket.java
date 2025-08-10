@@ -17,6 +17,9 @@ public interface LocationalSoundPacket extends SoundPacket {
      * @return the distance, the audio can be heard
      */
     float getDistance();
+    String getCustomInfo();
+    void setDistance(float newvalue);
+    void setCustomInfo(String info);
 
     /**
      * A builder to build a locational sound packet.
@@ -40,6 +43,8 @@ public interface LocationalSoundPacket extends SoundPacket {
          * @return the builder
          */
         T distance(float distance);
+
+        T custominfo(String info);
 
     }
 

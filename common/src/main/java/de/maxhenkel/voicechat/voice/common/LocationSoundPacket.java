@@ -10,17 +10,20 @@ public class LocationSoundPacket extends SoundPacket<LocationSoundPacket> {
 
     protected Vec3d location;
     protected float distance;
+    protected String CustomInfo;
 
-    public LocationSoundPacket(UUID channelId, UUID sender, Vec3d location, byte[] data, long sequenceNumber, float distance, @Nullable String category) {
-        super(channelId, sender, data, sequenceNumber, category);
+    public LocationSoundPacket(UUID channelId, UUID sender, Vec3d location, byte[] data, long sequenceNumber, float distance, @Nullable String category, String info) {
+        super(channelId, sender, data, sequenceNumber, category, info);
         this.location = location;
         this.distance = distance;
+        this.CustomInfo = info;
     }
 
-    public LocationSoundPacket(UUID channelId, UUID sender, short[] data, Vec3d location, float distance, @Nullable String category) {
-        super(channelId, sender, data, category);
+    public LocationSoundPacket(UUID channelId, UUID sender, short[] data, Vec3d location, float distance, @Nullable String category, String info) {
+        super(channelId, sender, data, category, info);
         this.location = location;
         this.distance = distance;
+        this.CustomInfo = info;
     }
 
     public LocationSoundPacket() {
@@ -35,6 +38,18 @@ public class LocationSoundPacket extends SoundPacket<LocationSoundPacket> {
         return distance;
     }
 
+    public String getCustomInfo() {
+        return CustomInfo;
+    }
+
+    public void setDistance(Float Distance) {
+        distance = Distance;
+    }
+
+    public void setCustomInfo(String CInfo) {
+        CustomInfo = CInfo;
+    }
+
     @Override
     public LocationSoundPacket fromBytes(PacketBuffer buf) {
         LocationSoundPacket soundPacket = new LocationSoundPacket();
@@ -44,6 +59,7 @@ public class LocationSoundPacket extends SoundPacket<LocationSoundPacket> {
         soundPacket.data = buf.readByteArray();
         soundPacket.sequenceNumber = buf.readLong();
         soundPacket.distance = buf.readFloat();
+        soundPacket.custominfo = buf.readString(255);
 
         byte data = buf.readByte();
         if (hasFlag(data, HAS_CATEGORY_MASK)) {
@@ -63,6 +79,7 @@ public class LocationSoundPacket extends SoundPacket<LocationSoundPacket> {
         buf.writeByteArray(data);
         buf.writeLong(sequenceNumber);
         buf.writeFloat(distance);
+        buf.writeString(custominfo);
 
         byte data = 0b0;
         if (category != null) {

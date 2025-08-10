@@ -6,6 +6,9 @@ package de.maxhenkel.voicechat.api.packets;
  */
 public interface StaticSoundPacket extends SoundPacket {
 
+    void setCustomInfo(String Info);
+    String getCustomInfo();
+
     /**
      * A builder to build a static sound packet.
      *

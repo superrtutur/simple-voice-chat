@@ -54,7 +54,7 @@ public class MicrophonePacketImpl implements MicrophonePacket {
     @Override
     @Deprecated
     public EntitySoundPacket toEntitySoundPacket(UUID entityUuid, boolean whispering) {
-        return new EntitySoundPacketImpl(new PlayerSoundPacket(sender, sender, packet.getData(), packet.getSequenceNumber(), whispering, Utils.getDefaultDistanceServer(), null));
+        return new EntitySoundPacketImpl(new PlayerSoundPacket(sender, sender, packet.getData(), packet.getSequenceNumber(), whispering, Utils.getDefaultDistanceServer(), null, null));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class MicrophonePacketImpl implements MicrophonePacket {
     public LocationalSoundPacket toLocationalSoundPacket(Position position) {
         if (position instanceof PositionImpl) {
             PositionImpl p = (PositionImpl) position;
-            return new LocationalSoundPacketImpl(new LocationSoundPacket(sender, sender, p.getPosition(), packet.getData(), packet.getSequenceNumber(), Utils.getDefaultDistanceServer(), null));
+            return new LocationalSoundPacketImpl(new LocationSoundPacket(sender, sender, p.getPosition(), packet.getData(), packet.getSequenceNumber(), Utils.getDefaultDistanceServer(), null, ""));
         } else {
             throw new IllegalArgumentException("position is not an instance of PositionImpl");
         }
@@ -71,7 +71,7 @@ public class MicrophonePacketImpl implements MicrophonePacket {
     @Override
     @Deprecated
     public StaticSoundPacket toStaticSoundPacket() {
-        return new StaticSoundPacketImpl(new GroupSoundPacket(sender, sender, packet.getData(), packet.getSequenceNumber(), null));
+        return new StaticSoundPacketImpl(new GroupSoundPacket(sender, sender, packet.getData(), packet.getSequenceNumber(), null, null));
     }
 
 }

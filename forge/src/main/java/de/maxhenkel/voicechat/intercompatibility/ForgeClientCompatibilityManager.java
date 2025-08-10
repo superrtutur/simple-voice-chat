@@ -90,7 +90,7 @@ public class ForgeClientCompatibilityManager extends ClientCompatibilityManager 
     }
 
     @Override
-    public void onRenderNamePlate(RenderNameplateEvent onRenderNamePlate) {
+    public void onRenderLiving(RenderNameplateEvent onRenderNamePlate) {
         renderNameplateEvents.add(onRenderNamePlate);
     }
 

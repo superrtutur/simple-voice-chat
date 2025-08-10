@@ -14,25 +14,36 @@ public abstract class SoundPacket<T extends SoundPacket> implements Packet<T> {
     protected long sequenceNumber;
     @Nullable
     protected String category;
+    protected String custominfo;
 
-    public SoundPacket(UUID channelId, UUID sender, byte[] data, long sequenceNumber, @Nullable String category) {
+    public SoundPacket(UUID channelId, UUID sender, byte[] data, long sequenceNumber, @Nullable String category, String info) {
         this.channelId = channelId;
         this.sender = sender;
         this.data = data;
         this.sequenceNumber = sequenceNumber;
         this.category = category;
+        this.custominfo = info;
     }
 
-    public SoundPacket(UUID channelId, UUID sender, short[] data, @Nullable String category) {
+    public SoundPacket(UUID channelId, UUID sender, short[] data, @Nullable String category, String info) {
         this.channelId = channelId;
         this.sender = sender;
         this.data = Utils.shortsToBytes(data);
         this.sequenceNumber = -1L;
         this.category = category;
+        this.custominfo = info;
     }
 
     public SoundPacket() {
 
+    }
+
+    public void setCustomInfo(String info) {
+        this.custominfo = info;
+    }
+
+    public String getCustomInfo() {
+        return this.custominfo;
     }
 
     public UUID getChannelId() {

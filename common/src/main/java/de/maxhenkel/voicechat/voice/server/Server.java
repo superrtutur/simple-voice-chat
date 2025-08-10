@@ -376,7 +376,7 @@ public class Server extends Thread {
         if (groupId == null) {
             return;
         }
-        GroupSoundPacket groupSoundPacket = new GroupSoundPacket(senderState.getUuid(), senderState.getUuid(), packet.getData(), packet.getSequenceNumber(), null);
+        GroupSoundPacket groupSoundPacket = new GroupSoundPacket(senderState.getUuid(), senderState.getUuid(), packet.getData(), packet.getSequenceNumber(), null, null);
         for (PlayerState state : playerStateManager.getStates()) {
             if (!groupId.equals(state.getGroup())) {
                 continue;
@@ -409,7 +409,7 @@ public class Server extends Thread {
                         if (receiverState == null) {
                             return;
                         }
-                        GroupSoundPacket groupSoundPacket = new GroupSoundPacket(senderState.getUuid(), senderState.getUuid(), packet.getData(), packet.getSequenceNumber(), null);
+                        GroupSoundPacket groupSoundPacket = new GroupSoundPacket(senderState.getUuid(), senderState.getUuid(), packet.getData(), packet.getSequenceNumber(), null, null);
                         @Nullable ClientConnection connection = getConnection(receiverState.getUuid());
                         sendSoundPacket(sender, senderState, spectatingPlayer, receiverState, connection, groupSoundPacket, SoundPacketEvent.SOURCE_SPECTATOR);
                         return;
@@ -417,7 +417,7 @@ public class Server extends Thread {
                 }
             }
             if (Voicechat.SERVER_CONFIG.spectatorInteraction.get()) {
-                soundPacket = new LocationSoundPacket(sender.getUniqueID(), sender.getUniqueID(), sender.getPositionEyes(1F), packet.getData(), packet.getSequenceNumber(), distance, null);
+                soundPacket = new LocationSoundPacket(sender.getUniqueID(), sender.getUniqueID(), sender.getPositionEyes(1F), packet.getData(), packet.getSequenceNumber(), distance, null, "Spectator");
                 source = SoundPacketEvent.SOURCE_SPECTATOR;
             }
         }
@@ -427,7 +427,7 @@ public class Server extends Thread {
             float whisperMultiplayer = packet.isWhispering() ? Voicechat.SERVER_CONFIG.whisperDistanceMultiplier.get().floatValue() : 1F;
             float multiplier = crouchMultiplayer * whisperMultiplayer;
             distance = distance * multiplier;
-            soundPacket = new PlayerSoundPacket(sender.getUniqueID(), sender.getUniqueID(), packet.getData(), packet.getSequenceNumber(), packet.isWhispering(), distance, null);
+            soundPacket = new PlayerSoundPacket(sender.getUniqueID(), sender.getUniqueID(), packet.getData(), packet.getSequenceNumber(), packet.isWhispering(), distance, null, "Whisper");
             source = SoundPacketEvent.SOURCE_PROXIMITY;
         }
 

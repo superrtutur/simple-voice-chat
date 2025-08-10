@@ -3,6 +3,7 @@ package de.maxhenkel.voicechat.voice.client;
 import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.VoicechatClient;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
+import de.maxhenkel.voicechat.api.packets.StaticSoundPacket;
 import de.maxhenkel.voicechat.debug.VoicechatUncaughtExceptionHandler;
 import de.maxhenkel.voicechat.integration.freecam.FreecamUtil;
 import de.maxhenkel.voicechat.plugins.ClientPluginManager;
@@ -114,12 +115,13 @@ public class AudioChannel extends Thread {
                 if (packet.getData().length == 0) {
                     if (packet instanceof PlayerSoundPacket) {
                         PlayerSoundPacket playerSoundPacket = (PlayerSoundPacket) packet;
-                        ClientPluginManager.instance().onReceiveEntityClientSound(uuid, playerSoundPacket.getSender(), new short[0], playerSoundPacket.isWhispering(), playerSoundPacket.getDistance());
+                        ClientPluginManager.instance().onReceiveEntityClientSound(uuid, playerSoundPacket.getSender(), new short[0], playerSoundPacket.isWhispering(), playerSoundPacket.getDistance(), playerSoundPacket.getCustomInfo());
                     } else if (packet instanceof LocationSoundPacket) {
                         LocationSoundPacket locationSoundPacket = (LocationSoundPacket) packet;
-                        ClientPluginManager.instance().onReceiveLocationalClientSound(uuid, new short[0], locationSoundPacket.getLocation(), locationSoundPacket.getDistance());
+                        ClientPluginManager.instance().onReceiveLocationalClientSound(uuid, new short[0], locationSoundPacket.getLocation(), locationSoundPacket.getDistance(), locationSoundPacket.getCustomInfo());
                     } else if (packet instanceof GroupSoundPacket) {
-                        ClientPluginManager.instance().onReceiveStaticClientSound(uuid, new short[0]);
+                        GroupSoundPacket staticSoundPacket = (GroupSoundPacket) packet;
+                        ClientPluginManager.instance().onReceiveStaticClientSound(uuid, new short[0], staticSoundPacket.getCustomInfo());
                     }
                     lastSequenceNumber = -1L;
                     packetBuffer.clear();
@@ -191,7 +193,8 @@ public class AudioChannel extends Thread {
         float volume = VoicechatClient.CLIENT_CONFIG.voiceChatVolume.get().floatValue() * channelVolume;
 
         if (packet instanceof GroupSoundPacket) {
-            short[] processedMonoData = ClientPluginManager.instance().onReceiveStaticClientSound(uuid, monoData);
+            GroupSoundPacket soundPacket = (GroupSoundPacket) packet;
+            short[] processedMonoData = ClientPluginManager.instance().onReceiveStaticClientSound(uuid, monoData, soundPacket.getCustomInfo());
             speaker.play(processedMonoData, volume, packet.getCategory());
             client.getTalkCache().updateTalking(uuid, false);
             appendRecording(() -> PositionalAudioUtils.convertToStereo(processedMonoData));
@@ -214,7 +217,7 @@ public class AudioChannel extends Thread {
                 }
             }
             if (entity == minecraft.getRenderViewEntity()) {
-                short[] processedMonoData = ClientPluginManager.instance().onReceiveStaticClientSound(uuid, monoData);
+                short[] processedMonoData = ClientPluginManager.instance().onReceiveStaticClientSound(uuid, monoData, soundPacket.getCustomInfo());
                 speaker.play(processedMonoData, volume, soundPacket.getCategory());
                 client.getTalkCache().updateTalking(uuid, soundPacket.isWhispering());
                 appendRecording(() -> PositionalAudioUtils.convertToStereo(processedMonoData));
@@ -228,7 +231,7 @@ public class AudioChannel extends Thread {
             volume *= deathVolume;
             Vec3d pos = entity.getPositionEyes(1F);
 
-            short[] processedMonoData = ClientPluginManager.instance().onReceiveEntityClientSound(uuid, soundPacket.getSender(), monoData, soundPacket.isWhispering(), soundPacket.getDistance());
+            short[] processedMonoData = ClientPluginManager.instance().onReceiveEntityClientSound(uuid, soundPacket.getSender(), monoData, soundPacket.isWhispering(), soundPacket.getDistance(), soundPacket.getCustomInfo());
 
             if (FreecamUtil.getDistanceTo(pos) > soundPacket.getDistance() + 1D) {
                 return;
@@ -256,7 +259,7 @@ public class AudioChannel extends Thread {
             appendRecording(() -> PositionalAudioUtils.convertToStereoForRecording(soundPacket.getDistance(), pos, processedMonoData, recordingVolume));
         } else if (packet instanceof LocationSoundPacket) {
             LocationSoundPacket p = (LocationSoundPacket) packet;
-            short[] processedMonoData = ClientPluginManager.instance().onReceiveLocationalClientSound(uuid, monoData, p.getLocation(), p.getDistance());
+            short[] processedMonoData = ClientPluginManager.instance().onReceiveLocationalClientSound(uuid, monoData, p.getLocation(), p.getDistance(), p.getCustomInfo());
             if (FreecamUtil.getDistanceTo(p.getLocation()) > p.getDistance() + 1D) {
                 return;
             }

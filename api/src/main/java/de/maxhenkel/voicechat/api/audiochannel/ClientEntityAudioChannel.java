@@ -23,10 +23,12 @@ public interface ClientEntityAudioChannel extends ClientAudioChannel {
      * @return the distance, the audio can be heard
      */
     float getDistance();
+    String getCustomInfo();
 
     /**
      * @param distance the distance, the audio can be heard
      */
     void setDistance(float distance);
+    void setCustomInfo(String CustomInfo);
 
 }

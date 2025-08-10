@@ -26,4 +26,8 @@ public interface LocationalAudioChannel extends AudioChannel {
      */
     void setDistance(float distance);
 
+    String getCustomInfo();
+
+    void setCustomInfo(String CustomInfo);
+
 }

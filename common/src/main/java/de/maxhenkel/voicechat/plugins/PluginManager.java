@@ -109,6 +109,8 @@ public class PluginManager {
             return;
         }
 
+        System.out.println("ON LISTENER AUDIO");
+
         SoundPacketImpl soundPacket;
         if (packet instanceof GroupSoundPacket) {
             soundPacket = new StaticSoundPacketImpl((GroupSoundPacket) packet);

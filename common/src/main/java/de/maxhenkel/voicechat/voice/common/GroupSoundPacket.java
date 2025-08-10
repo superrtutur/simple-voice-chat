@@ -7,16 +7,28 @@ import java.util.UUID;
 
 public class GroupSoundPacket extends SoundPacket<GroupSoundPacket> {
 
-    public GroupSoundPacket(UUID channelId, UUID sender, byte[] data, long sequenceNumber, @Nullable String category) {
-        super(channelId, sender, data, sequenceNumber, category);
+    protected String custominfo;
+
+    public GroupSoundPacket(UUID channelId, UUID sender, byte[] data, long sequenceNumber, @Nullable String category, String info) {
+        super(channelId, sender, data, sequenceNumber, category, info);
+        custominfo = info;
     }
 
-    public GroupSoundPacket(UUID channelId, UUID sender, short[] data, @Nullable String category) {
-        super(channelId, sender, data, category);
+    public GroupSoundPacket(UUID channelId, UUID sender, short[] data, @Nullable String category, String info) {
+        super(channelId, sender, data, category, info);
+        custominfo = info;
     }
 
     public GroupSoundPacket() {
 
+    }
+
+    public String getCustomInfo() {
+        return custominfo;
+    }
+
+    public void setCustomInfo(String CustomInfo) {
+        custominfo = CustomInfo;
     }
 
     @Override
@@ -26,6 +38,7 @@ public class GroupSoundPacket extends SoundPacket<GroupSoundPacket> {
         soundPacket.sender = buf.readUniqueId();
         soundPacket.data = buf.readByteArray();
         soundPacket.sequenceNumber = buf.readLong();
+        soundPacket.custominfo = buf.readString(255);
 
         byte data = buf.readByte();
         if (hasFlag(data, HAS_CATEGORY_MASK)) {
@@ -40,6 +53,7 @@ public class GroupSoundPacket extends SoundPacket<GroupSoundPacket> {
         buf.writeUniqueId(sender);
         buf.writeByteArray(data);
         buf.writeLong(sequenceNumber);
+        buf.writeString(custominfo);
 
         byte data = 0b0;
         if (category != null) {

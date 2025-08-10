@@ -58,20 +58,22 @@ public class ClientPluginManager {
         return clientSoundEvent.getRawAudio();
     }
 
-    public short[] onReceiveEntityClientSound(UUID id, UUID entity, short[] rawAudio, boolean whispering, float distance) {
-        ClientReceiveSoundEventImpl.EntitySoundImpl clientSoundEvent = new ClientReceiveSoundEventImpl.EntitySoundImpl(id, entity, rawAudio, whispering, distance);
+    public short[] onReceiveEntityClientSound(UUID id, UUID entity, short[] rawAudio, boolean whispering, float distance, String CustomInfo) {
+        ClientReceiveSoundEventImpl.EntitySoundImpl clientSoundEvent = new ClientReceiveSoundEventImpl.EntitySoundImpl(id, entity, rawAudio, whispering, distance, CustomInfo);
         pluginManager.dispatchEvent(ClientReceiveSoundEvent.EntitySound.class, clientSoundEvent);
         return clientSoundEvent.getRawAudio();
     }
 
-    public short[] onReceiveLocationalClientSound(UUID id, short[] rawAudio, Vec3d pos, float distance) {
-        ClientReceiveSoundEventImpl.LocationalSoundImpl clientSoundEvent = new ClientReceiveSoundEventImpl.LocationalSoundImpl(id, rawAudio, new PositionImpl(pos), distance);
+    public short[] onReceiveLocationalClientSound(UUID id, short[] rawAudio, Vec3d pos, float distance, String CustomInfo) {
+        System.out.println("RECU LOCATIONAL CLIENT SOUND");
+        System.out.println(CustomInfo);
+        ClientReceiveSoundEventImpl.LocationalSoundImpl clientSoundEvent = new ClientReceiveSoundEventImpl.LocationalSoundImpl(id, rawAudio, new PositionImpl(pos), distance, CustomInfo);
         pluginManager.dispatchEvent(ClientReceiveSoundEvent.LocationalSound.class, clientSoundEvent);
         return clientSoundEvent.getRawAudio();
     }
 
-    public short[] onReceiveStaticClientSound(UUID id, short[] rawAudio) {
-        ClientReceiveSoundEventImpl.StaticSoundImpl clientSoundEvent = new ClientReceiveSoundEventImpl.StaticSoundImpl(id, rawAudio);
+    public short[] onReceiveStaticClientSound(UUID id, short[] rawAudio, String CustomInfo) {
+        ClientReceiveSoundEventImpl.StaticSoundImpl clientSoundEvent = new ClientReceiveSoundEventImpl.StaticSoundImpl(id, rawAudio, CustomInfo);
         pluginManager.dispatchEvent(ClientReceiveSoundEvent.StaticSound.class, clientSoundEvent);
         return clientSoundEvent.getRawAudio();
     }

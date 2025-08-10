@@ -13,6 +13,7 @@ public class ClientLocationalAudioChannelImpl extends ClientAudioChannelImpl imp
 
     private Position position;
     private float distance;
+    private String CustomInfo;
 
     public ClientLocationalAudioChannelImpl(UUID id, Position position) {
         super(id);
@@ -22,7 +23,7 @@ public class ClientLocationalAudioChannelImpl extends ClientAudioChannelImpl imp
 
     @Override
     protected SoundPacket<?> createSoundPacket(short[] rawAudio) {
-        return new LocationSoundPacket(id, id, rawAudio, new Vec3d(position.getX(), position.getY(), position.getZ()), distance, category);
+        return new LocationSoundPacket(id, id, rawAudio, new Vec3d(position.getX(), position.getY(), position.getZ()), distance, category, CustomInfo);
     }
 
     @Override
@@ -38,6 +39,16 @@ public class ClientLocationalAudioChannelImpl extends ClientAudioChannelImpl imp
     @Override
     public float getDistance() {
         return distance;
+    }
+
+    @Override
+    public String getCustomInfo() {
+        return CustomInfo;
+    }
+
+    @Override
+    public void setCustomInfo(String info) {
+        this.CustomInfo = info;
     }
 
     @Override

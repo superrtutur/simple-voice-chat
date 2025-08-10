@@ -1,8 +1,13 @@
 package de.maxhenkel.voicechat.voice.client;
 
 import de.maxhenkel.voicechat.intercompatibility.ClientCompatibilityManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
+import java.util.Objects;
 
 public class PTTKeyHandler {
 
@@ -18,17 +23,11 @@ public class PTTKeyHandler {
         if (KeyEvents.KEY_PTT.getKeyCode() > 0 && KeyEvents.KEY_PTT.getKeyCode() < 256) {
             pttKeyDown = Keyboard.isKeyDown(KeyEvents.KEY_PTT.getKeyCode());
         }
-        if (KeyEvents.KEY_WHISPER.getKeyCode() > 0 && KeyEvents.KEY_PTT.getKeyCode() < 256) {
-            whisperKeyDown = Keyboard.isKeyDown(KeyEvents.KEY_WHISPER.getKeyCode());
-        }
     }
 
     public void onMouseEvent() {
         if (KeyEvents.KEY_PTT.getKeyCode() < 0) {
             pttKeyDown = Mouse.isButtonDown(KeyEvents.KEY_PTT.getKeyCode() + 100);
-        }
-        if (KeyEvents.KEY_WHISPER.getKeyCode() < 0) {
-            whisperKeyDown = Mouse.isButtonDown(KeyEvents.KEY_WHISPER.getKeyCode() + 100);
         }
     }
 

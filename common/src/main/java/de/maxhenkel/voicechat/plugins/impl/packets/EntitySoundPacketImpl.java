@@ -32,6 +32,21 @@ public class EntitySoundPacketImpl extends SoundPacketImpl implements EntitySoun
     }
 
     @Override
+    public String getCustomInfo() {
+        return packet.getCustomInfo();
+    }
+
+    @Override
+    public void setDistance(float distance) {
+        packet.setDistance(distance);
+    }
+
+    @Override
+    public void setCustomInfo(String info) {
+        packet.setCustomInfo(info);
+    }
+
+    @Override
     public PlayerSoundPacket getPacket() {
         return packet;
     }
@@ -45,6 +60,7 @@ public class EntitySoundPacketImpl extends SoundPacketImpl implements EntitySoun
 
         protected UUID entityUuid;
         protected boolean whispering;
+        protected String CustomInfo;
         protected float distance;
 
         public BuilderImpl(SoundPacketImpl soundPacket) {
@@ -54,10 +70,16 @@ public class EntitySoundPacketImpl extends SoundPacketImpl implements EntitySoun
                 entityUuid = p.getEntityUuid();
                 whispering = p.isWhispering();
                 distance = p.getDistance();
+                CustomInfo = p.getCustomInfo();
             } else if (soundPacket instanceof LocationalSoundPacketImpl) {
                 LocationalSoundPacketImpl p = (LocationalSoundPacketImpl) soundPacket;
                 distance = p.getDistance();
+                CustomInfo = p.getCustomInfo();
             } else {
+                if (soundPacket instanceof StaticSoundPacketImpl) {
+                    StaticSoundPacketImpl p = (StaticSoundPacketImpl) soundPacket;
+                    CustomInfo = p.getCustomInfo();
+                }
                 distance = Utils.getDefaultDistanceServer();
             }
         }
@@ -90,7 +112,7 @@ public class EntitySoundPacketImpl extends SoundPacketImpl implements EntitySoun
             if (entityUuid == null) {
                 throw new IllegalStateException("entityUuid missing");
             }
-            return new EntitySoundPacketImpl(new PlayerSoundPacket(channelId, sender, opusEncodedData, sequenceNumber, whispering, distance, category));
+            return new EntitySoundPacketImpl(new PlayerSoundPacket(channelId, sender, opusEncodedData, sequenceNumber, whispering, distance, category, CustomInfo));
         }
 
     }

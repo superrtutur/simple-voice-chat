@@ -36,7 +36,6 @@ public class StaticSoundPacketImpl extends SoundPacketImpl implements StaticSoun
             super(soundPacket);
             if (soundPacket instanceof LocationalSoundPacketImpl) {
                 LocationalSoundPacketImpl p = (LocationalSoundPacketImpl) soundPacket;
-                System.out.println("RECEIVE LOCATIONAL");
                 CustomInfo = p.getCustomInfo();
             } else if (soundPacket instanceof EntitySoundPacketImpl) {
                 EntitySoundPacketImpl p = (EntitySoundPacketImpl) soundPacket;
@@ -44,8 +43,6 @@ public class StaticSoundPacketImpl extends SoundPacketImpl implements StaticSoun
             } else {
                 if (soundPacket instanceof StaticSoundPacketImpl) {
                     StaticSoundPacketImpl p = (StaticSoundPacketImpl) soundPacket;
-                    System.out.println("RECEIVE STATIC");
-                    System.out.println(p.getCustomInfo());
                     CustomInfo = p.getCustomInfo();
                 }
             }

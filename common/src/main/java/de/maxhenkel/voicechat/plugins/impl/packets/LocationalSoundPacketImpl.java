@@ -77,10 +77,7 @@ public class LocationalSoundPacketImpl extends SoundPacketImpl implements Locati
             } else {
                 if (soundPacket instanceof StaticSoundPacketImpl) {
                     StaticSoundPacketImpl p = (StaticSoundPacketImpl) soundPacket;
-                    System.out.println("STATIC");
                     CustomInfo = p.getCustomInfo();
-                } else {
-                    System.out.println("NON CONNU");
                 }
 
 

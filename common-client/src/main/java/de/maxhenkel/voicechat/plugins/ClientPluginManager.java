@@ -65,8 +65,6 @@ public class ClientPluginManager {
     }
 
     public short[] onReceiveLocationalClientSound(UUID id, short[] rawAudio, Vec3d pos, float distance, String CustomInfo) {
-        System.out.println("RECU LOCATIONAL CLIENT SOUND");
-        System.out.println(CustomInfo);
         ClientReceiveSoundEventImpl.LocationalSoundImpl clientSoundEvent = new ClientReceiveSoundEventImpl.LocationalSoundImpl(id, rawAudio, new PositionImpl(pos), distance, CustomInfo);
         pluginManager.dispatchEvent(ClientReceiveSoundEvent.LocationalSound.class, clientSoundEvent);
         return clientSoundEvent.getRawAudio();
